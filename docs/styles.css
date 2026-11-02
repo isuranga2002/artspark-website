@@ -3,6 +3,12 @@
    the graphite cap (#4d4d4d) and the white tagline. Bold grotesque headings
    echo the wordmark; rounded cards and pill buttons keep it modern and soft. */
 
+/* Self-hosted Latin subsets (src/optimize_assets.py) — no third-party font requests. */
+@font-face { font-family: "Archivo"; font-style: normal; font-weight: 600 800; font-display: swap; src: url("assets/fonts/archivo-latin.woff2") format("woff2"); }
+@font-face { font-family: "Hind"; font-style: normal; font-weight: 400; font-display: swap; src: url("assets/fonts/hind-400-latin.woff2") format("woff2"); }
+@font-face { font-family: "Hind"; font-style: normal; font-weight: 600; font-display: swap; src: url("assets/fonts/hind-600-latin.woff2") format("woff2"); }
+@font-face { font-family: "Hind"; font-style: normal; font-weight: 700; font-display: swap; src: url("assets/fonts/hind-700-latin.woff2") format("woff2"); }
+
 :root {
   --bg: #0a0a0a;
   --bg-2: #111111;
@@ -168,6 +174,8 @@ summary::-webkit-details-marker { display: none; }
   100% { opacity: 0; transform: scale(1.16) translate3d(-2%, -1.5%, 0); }
 }
 @media (prefers-reduced-motion: reduce) { .hero-slide:first-child { opacity: 1; transform: none; } }
+.no-js .hero-slide { animation: none; }
+.no-js .hero-slide:first-child { opacity: 1; }
 @media (max-width: 760px) {
   .hero-bg::after { background: linear-gradient(180deg, rgba(10, 10, 10, 0.4) 0%, rgba(10, 10, 10, 0.55) 60%, var(--bg) 100%); }
   .hero-home::before { opacity: .6; }

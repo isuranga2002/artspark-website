@@ -36,6 +36,14 @@
     items.forEach(function (el) { el.classList.add('is-in'); });
   }
 
+  // Hero background: the first photo ships with the page, the others load once it has finished
+  window.addEventListener('load', function () {
+    document.querySelectorAll('.hero-slide[data-src]').forEach(function (im) {
+      im.srcset = im.getAttribute('data-srcset');
+      im.src = im.getAttribute('data-src');
+    });
+  });
+
   // Deep links (order.html#form, #faq…): land on the target once fonts and images have settled
   if (location.hash.length > 1) {
     window.addEventListener('load', function () {

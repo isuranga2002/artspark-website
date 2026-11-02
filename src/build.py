@@ -51,18 +51,24 @@ def wa(text=None):
     return f"https://wa.me/{C['whatsapp']}?text={quote(text)}"
 
 
-def unsplash(photo, w):
-    return f"https://images.unsplash.com/photo-{photo}?auto=format&fit=crop&w={w}&q=75"
+# Self-hosted WebP copies made by src/optimize_assets.py (photo id → name, widths, size).
+PHOTOS = json.loads((ROOT / "src" / "photos.json").read_text(encoding="utf-8"))
+
+
+def photo_src(photo, w):
+    return f"assets/img/{PHOTOS[photo]['name']}-{w}.webp"
+
+
+def photo_srcset(photo):
+    return ", ".join(f"{photo_src(photo, w)} {w}w" for w in PHOTOS[photo]["widths"])
 
 
 def img(photo, alt, ratio=(4, 3), w=1000, eager=False, sizes="(max-width: 760px) 100vw, 50vw"):
-    """Responsive Unsplash image with intrinsic size set, so nothing jumps on load."""
+    """Responsive self-hosted image with intrinsic size set, so nothing jumps on load."""
     rw, rh = ratio
     h = round(w * rh / rw)
-    half = w // 2
-    srcset = f"{unsplash(photo, half)} {half}w, {unsplash(photo, w)} {w}w, {unsplash(photo, w * 3 // 2)} {w * 3 // 2}w"
     load = 'fetchpriority="high"' if eager else 'loading="lazy"'
-    return (f'<img src="{unsplash(photo, w)}" srcset="{srcset}" sizes="{sizes}" '
+    return (f'<img src="{photo_src(photo, 800)}" srcset="{photo_srcset(photo)}" sizes="{sizes}" '
             f'width="{w}" height="{h}" alt="{escape(alt)}" {load} decoding="async" />')
 
 
@@ -342,7 +348,7 @@ def breadcrumbs(trail):
     }
 
 
-def head(path, title, desc, extra_schema=(), page_type="WebPage", robots="index, follow, max-image-preview:large, max-snippet:-1"):
+def head(path, title, desc, extra_schema=(), page_type="WebPage", robots="index, follow, max-image-preview:large, max-snippet:-1", preload=""):
     canonical = f"{URL}/" if path == "index.html" else f"{URL}/{path}"
     graph = [
         org_schema(),
@@ -385,15 +391,13 @@ def head(path, title, desc, extra_schema=(), page_type="WebPage", robots="index,
 <meta name="twitter:title" content="{t}" />
 <meta name="twitter:description" content="{d}" />
 <meta name="twitter:image" content="{og_img}" />
-<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" href="favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="manifest" href="site.webmanifest" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preconnect" href="https://images.unsplash.com" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Hind:wght@400;500;600;700&display=swap" />
+<link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fonts/hind-400-latin.woff2" as="font" type="font/woff2" crossorigin />{preload}
 <link rel="stylesheet" href="styles.css" />
 <script>document.documentElement.className='js'</script>
 <script src="site.js" defer></script>
@@ -544,13 +548,15 @@ HERO_SLIDES = [
 
 def hero_slides():
     """Slow cross-fading, zooming photos behind the home hero (decorative, so hidden from screen readers).
-    Only the first photo loads with priority; the rest arrive in the background."""
+    Only the first photo is in the initial download; site.js fills in the rest once the page has loaded."""
     slides = []
     for i, (photo, _) in enumerate(HERO_SLIDES):
-        srcset = ", ".join(f"{unsplash(photo, w)} {w}w" for w in (800, 1400, 2000))
-        prio = 'fetchpriority="high"' if i == 0 else 'fetchpriority="low"'
-        slides.append(f'<img class="hero-slide" src="{unsplash(photo, 1400)}" srcset="{srcset}" sizes="100vw" '
-                      f'width="1400" height="933" alt="" {prio} decoding="async" style="animation-delay:{i * 6}s" />')
+        if i == 0:
+            src = f'src="{photo_src(photo, 1200)}" srcset="{photo_srcset(photo)}" fetchpriority="high"'
+        else:
+            src = f'data-src="{photo_src(photo, 1200)}" data-srcset="{photo_srcset(photo)}"'
+        slides.append(f'<img class="hero-slide" {src} sizes="100vw" width="1600" height="1066" alt="" '
+                      f'decoding="async" style="animation-delay:{i * 6}s" />')
     return '<div class="hero-bg" aria-hidden="true">' + "".join(slides) + "</div>"
 
 
@@ -785,6 +791,8 @@ def build_home():
         f"Assignment Writers in Sri Lanka | {B} — Your Trusted Academic Partner",
         f"{B} is a Sri Lankan study-consulting desk: assignments, theses, research, articles, case studies and presentations by government-university graduates. Fixed price, on-time delivery, free Turnitin and AI report. Free quote in 30 minutes on WhatsApp.",
         main,
+        preload=(f'\n<link rel="preload" as="image" href="{photo_src(HERO_SLIDES[0][0], 1200)}" '
+                 f'imagesrcset="{photo_srcset(HERO_SLIDES[0][0])}" imagesizes="100vw" fetchpriority="high" />'),
     )
 
 
@@ -1067,7 +1075,7 @@ def build_privacy():
       <h2 id="privacy">1. Your privacy</h2>
       <p>We collect only what we need to quote and complete your order: your name, your contact number and the documents and details you send about the work. This website does not store anything you type into the order form — the form simply opens WhatsApp with a pre-written message.</p>
       <p>Your information is used only to communicate with you and complete your order. We never sell it, never share your identity with writers, and never publish your name, university or work. You can ask us to delete your files and conversation history at any time after delivery.</p>
-      <p>This website loads fonts from Google Fonts and images from Unsplash, which receive standard technical data such as your IP address when the page loads. We do not use advertising trackers.</p>
+      <p>All fonts and images on this website are served from our own domain — no third-party trackers, advertising cookies or analytics scripts are loaded.</p>
 
       <h2 id="terms">2. Terms of service</h2>
       <ul>
@@ -1116,7 +1124,8 @@ def build_404():
         + header("") + f'<main id="main">\n{main}</main>\n' + footer()
     for a, b in [('href="index.html"', 'href="/"'), ('href="assets/', 'href="/assets/'), ('src="assets/', 'src="/assets/'),
                  ('href="styles.css"', 'href="/styles.css"'), ('src="site.js"', 'src="/site.js"'),
-                 ('href="site.webmanifest"', 'href="/site.webmanifest"')] + \
+                 ('href="site.webmanifest"', 'href="/site.webmanifest"'),
+                 ('href="favicon.ico"', 'href="/favicon.ico"')] + \
                 [(f'href="{p}', f'href="/{p}') for p in ("services.html", "about.html", "order.html", "privacy.html")]:
         html = html.replace(a, b)
     (OUT / "404.html").write_text(html, encoding="utf-8")
