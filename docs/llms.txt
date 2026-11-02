@@ -1,0 +1,22 @@
+# ArtSpark
+
+> ArtSpark — "Your Trusted Partner in Academic Excellence" — is a Sri Lankan study-consulting and academic writing-support service founded in 2024, for university and professional students in Sri Lanka and Sri Lankan students abroad.
+
+Every writer is a graduate of a Sri Lankan government university and works only within their own faculty. Every order receives a fixed price and delivery time before payment, a free Turnitin similarity report and AI-detection report (plagiarism and AI text kept below 10%), and seven days of free revisions. Free quotes are given within 30 minutes on WhatsApp (+94 71 918 8867), 24 hours a day, in English and Sinhala.
+
+## Services
+- [Assignment writing](https://artspark.edu.lk/services.html#assignments): Coursework, essays and reports from diploma to MBA, written to your rubric and referencing style.
+- [Thesis & dissertation](https://artspark.edu.lk/services.html#thesis): Proposal to final chapter, shaped round your supervisor's feedback, with viva preparation at the end.
+- [Research & data analysis](https://artspark.edu.lk/services.html#research): Questionnaires, SPSS, Excel, R or NVivo analysis — with the output explained in plain words.
+- [Journal articles & papers](https://artspark.edu.lk/services.html#articles): Research articles, review papers and conference abstracts prepared to the journal's author guidelines.
+- [Presentations](https://artspark.edu.lk/services.html#presentations): Clear, well-designed PowerPoint or Google Slides decks built from your report, with speaker notes.
+- [Case study analysis](https://artspark.edu.lk/services.html#case-studies): Applied analysis using the right framework — SWOT, PESTEL, Porter's Five Forces, VRIO and more.
+- [Academic coaching](https://artspark.edu.lk/services.html#coaching): One-to-one online sessions on methods, statistics, academic writing and viva practice.
+- [Editing & proofreading](https://artspark.edu.lk/services.html#editing): Grammar, flow, structure, referencing and similarity reduction on work you have already written.
+
+## Pages
+- [Home](https://artspark.edu.lk/): Overview, guarantees, process, writer panel and coverage
+- [Services](https://artspark.edu.lk/services.html): What each service includes
+- [About](https://artspark.edu.lk/about.html): History, writer panel and working rules
+- [Make an order / FAQ](https://artspark.edu.lk/order.html): Order form and frequently asked questions
+- [Privacy & terms](https://artspark.edu.lk/privacy.html): Privacy, terms and academic-integrity policy

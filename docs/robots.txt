@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+# Search and answer engines are welcome
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://artspark.edu.lk/sitemap.xml
