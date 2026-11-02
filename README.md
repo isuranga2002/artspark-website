@@ -4,7 +4,12 @@ Static website for ArtSpark — *Your Trusted Partner in Academic Excellence*.
 
 ## Publish
 
-The site is hosted on **GitHub Pages** from the `docs/` folder of the `main` branch. Every push to `main` republishes it at https://artspark.edu.lk within a minute or two. `docs/CNAME` holds the custom domain — keep it.
+The site is hosted on **GitHub Pages** from the `docs/` folder of the `main` branch. Every push to `main` republishes it within a minute or two.
+
+It is live now at https://isuranga2002.github.io/artspark-website/ while LK Domain Registry activates **artspark.edu.lk** (the DNS records are already saved there). Once the domain is active:
+
+1. Create `docs/CNAME` containing the single line `artspark.edu.lk`, commit and push.
+2. In the repo's Settings → Pages, confirm the custom domain shows `artspark.edu.lk`, then tick **Enforce HTTPS** when it becomes available.
 
 To host elsewhere instead, upload everything inside `docs/` to the host's root folder. No server code or database is needed.
 
@@ -21,6 +26,7 @@ Before going live:
 ## Edit
 
 - Text, services, FAQ, history: `src/build.py`, then re-run the build.
+- Photos and fonts: add an Unsplash photo id to `PHOTOS` in `src/optimize_assets.py`, run it, then run the build. Images are served as resized WebP from `docs/assets/img`.
 - Colours, fonts, layout: `docs/styles.css` (tokens at the top).
 - Menu, scroll animations, order form: `docs/site.js`.
 - Logo, icons and the social-share image: generated from `src/logo-source.png` by `python3 src/make_assets.py` (needs Pillow).
