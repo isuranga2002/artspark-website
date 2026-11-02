@@ -8,7 +8,7 @@ The site is hosted on **GitHub Pages** from the `docs/` folder of the `main` bra
 
 It is live now at https://isuranga2002.github.io/artspark-website/ while LK Domain Registry activates **artspark.edu.lk** (the DNS records are already saved there). Once the domain is active:
 
-1. Create `docs/CNAME` containing the single line `artspark.edu.lk`, commit and push.
+1. In `src/build.py` set `BASE_PATH = "/"` and run `python3 src/build.py`. Create `docs/CNAME` containing the single line `artspark.edu.lk`. Commit and push.
 2. In the repo's Settings → Pages, confirm the custom domain shows `artspark.edu.lk`, then tick **Enforce HTTPS** when it becomes available.
 
 To host elsewhere instead, upload everything inside `docs/` to the host's root folder. No server code or database is needed.

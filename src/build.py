@@ -43,6 +43,9 @@ REVIEWS = [
 TODAY = date.today().isoformat()
 C = CONFIG
 URL = C["site_url"]
+# Folder the site is served from. "/" once artspark.edu.lk is connected; while the site runs on
+# isuranga2002.github.io it lives under /artspark-website/. Only the 404 page needs this.
+BASE_PATH = "/artspark-website/"
 B = C["brand"]
 
 
@@ -1112,22 +1115,19 @@ def build_404():
     <h1 class="display" style="font-size:clamp(40px,6vw,76px)">This page was <span class="gold-text">handed in elsewhere.</span></h1>
     <p class="lede">The link may be old or mistyped. Try one of these instead — or message us and we will point you the right way.</p>
     <div class="btn-row" style="margin-top:34px">
-      <a href="/" class="btn btn-gold">Back to home</a>
+      <a href="index.html" class="btn btn-gold">Back to home</a>
       <a href="services.html" class="btn btn-ghost">Our services</a>
       <a href="order.html" class="btn btn-ghost">Make an order</a>
     </div>
   </div>
 </section>
 """
-    # The 404 page is served from any path, so every link must resolve from the root.
+    # The 404 page is served from any missing path, so its relative links are anchored to the
+    # site folder with <base> (BASE_PATH: "/" on the custom domain, "/artspark-website/" on github.io).
     html = head("404.html", f"Page not found | {B}", "The page you were looking for could not be found.", robots="noindex, follow") \
         + header("") + f'<main id="main">\n{main}</main>\n' + footer()
-    for a, b in [('href="index.html"', 'href="/"'), ('href="assets/', 'href="/assets/'), ('src="assets/', 'src="/assets/'),
-                 ('href="styles.css"', 'href="/styles.css"'), ('src="site.js"', 'src="/site.js"'),
-                 ('href="site.webmanifest"', 'href="/site.webmanifest"'),
-                 ('href="favicon.ico"', 'href="/favicon.ico"')] + \
-                [(f'href="{p}', f'href="/{p}') for p in ("services.html", "about.html", "order.html", "privacy.html")]:
-        html = html.replace(a, b)
+    html = html.replace('<meta charset="utf-8" />', f'<meta charset="utf-8" />\n<base href="{BASE_PATH}" />', 1)
+    html = html.replace('href="#main"', 'href="404.html#main"')
     (OUT / "404.html").write_text(html, encoding="utf-8")
     return "404.html"
 
