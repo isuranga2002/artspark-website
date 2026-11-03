@@ -45,7 +45,7 @@ C = CONFIG
 URL = C["site_url"]
 # Folder the site is served from. "/" once artspark.edu.lk is connected; while the site runs on
 # isuranga2002.github.io it lives under /artspark-website/. Only the 404 page needs this.
-BASE_PATH = "/artspark-website/"
+BASE_PATH = "/"
 B = C["brand"]
 
 
